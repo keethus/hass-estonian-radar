@@ -1,0 +1,62 @@
+{
+  "entity": {
+    "sensor": {
+      "rain_state": {
+        "default": "mdi:weather-rainy",
+        "state": {
+          "dry": "mdi:weather-partly-cloudy",
+          "raining": "mdi:weather-pouring",
+          "starting_soon": "mdi:weather-rainy",
+          "ending_soon": "mdi:weather-partly-rainy"
+        }
+      },
+      "rain_rate": {
+        "default": "mdi:water"
+      },
+      "rain_starts_in": {
+        "default": "mdi:clock-start"
+      },
+      "rain_ends_in": {
+        "default": "mdi:clock-end"
+      },
+      "expected_severity": {
+        "default": "mdi:weather-pouring"
+      },
+      "expected_total": {
+        "default": "mdi:cup-water"
+      },
+      "expected_peak": {
+        "default": "mdi:chart-bell-curve"
+      },
+      "expected_duration": {
+        "default": "mdi:timer-sand"
+      },
+      "radar_frame_time": {
+        "default": "mdi:radar"
+      },
+      "radar_frame_age": {
+        "default": "mdi:clock-alert-outline"
+      },
+      "nearest_radar_distance": {
+        "default": "mdi:radar"
+      },
+      "coverage_quality": {
+        "default": "mdi:signal"
+      },
+      "storm_speed": {
+        "default": "mdi:weather-windy"
+      },
+      "usable_forecast": {
+        "default": "mdi:radar"
+      }
+    },
+    "binary_sensor": {
+      "rain_expected": {
+        "default": "mdi:weather-cloudy-clock",
+        "state": {
+          "on": "mdi:weather-rainy"
+        }
+      }
+    }
+  }
+}

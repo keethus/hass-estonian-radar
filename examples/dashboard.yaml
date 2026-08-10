@@ -1,0 +1,70 @@
+# Example Lovelace cards. Replace `home` with your own entry's slug.
+
+# --- A single tile: state, lead time and expected intensity -------------------------
+- type: tile
+  entity: sensor.home_rain
+  icon: mdi:weather-pouring
+  features:
+    - type: trend-graph
+
+# --- Summary card ------------------------------------------------------------------
+# Built in the dashboard rather than in the integration, so the wording follows
+# whatever language you want and declines place names correctly. Swap the strings for
+# your own language; the entity states underneath are already translated per user.
+- type: markdown
+  content: >-
+    {% set starts = states('sensor.home_rain_starts_in') %}
+    {% set ends = states('sensor.home_rain_ends_in') %}
+    {% set severity = states('sensor.home_expected_intensity') %}
+    {% set total = states('sensor.home_expected_total') %}
+    {% if is_state('binary_sensor.home_radar_data_problem', 'on') %}
+      ## No radar data
+    {% elif ends not in ['unknown', 'unavailable'] %}
+      ## Raining
+      Stopping in about {{ ends }} min
+    {% elif starts not in ['unknown', 'unavailable'] %}
+      ## Rain in about {{ starts }} min
+      {{ severity }}, around {{ total }} mm in total
+    {% else %}
+      ## No rain expected
+    {% endif %}
+
+# --- 90-minute precipitation bar chart ----------------------------------------------
+# Requires the ApexCharts card from HACS. The series is read from the sensor's
+# `forecast` attribute, which is deliberately kept out of the recorder.
+- type: custom:apexcharts-card
+  header:
+    show: true
+    title: Precipitation, next 90 min
+  graph_span: 90min
+  span:
+    start: minute
+  apex_config:
+    chart:
+      type: bar
+      height: 160
+    plotOptions:
+      bar:
+        columnWidth: 85%
+    dataLabels:
+      enabled: false
+  series:
+    - entity: sensor.home_rain_rate
+      name: mm/h
+      type: column
+      color: "#7aa6d6"
+      data_generator: |
+        return (entity.attributes.forecast || []).map(point => [
+          new Date(point.datetime).getTime(),
+          point.precipitation
+        ]);
+
+# --- How far ahead the radar can actually see ---------------------------------------
+# Worth showing near the edge of the network: when the weather arrives from outside the
+# composite, the usable horizon is much shorter than the configured one.
+- type: entities
+  entities:
+    - entity: sensor.home_usable_forecast
+      name: Usable forecast
+    - entity: sensor.home_radar_coverage
+      name: Radar coverage

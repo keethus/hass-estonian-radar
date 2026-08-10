@@ -1,0 +1,78 @@
+# Example automations driven by the integration's events.
+# Replace `home` with your own entry's slug.
+
+- alias: "Warn about incoming rain"
+  description: >-
+    The event fires on the transition into `starting_soon`, not on every update, so this
+    announces once per approaching band rather than every five minutes.
+  triggers:
+    - trigger: event
+      event_type: estonian_radar_rain_expected
+  conditions:
+    - condition: template
+      value_template: "{{ trigger.event.data.minutes_until <= 20 }}"
+    - condition: template
+      value_template: "{{ trigger.event.data.severity != 'very_light' }}"
+  actions:
+    - action: notify.persistent_notification
+      data:
+        title: "{{ trigger.event.data.location }}"
+        message: >-
+          Rain in about {{ trigger.event.data.minutes_until }} min,
+          around {{ trigger.event.data.total_mm }} mm expected.
+  mode: single
+
+- alias: "Close the windows before heavy rain"
+  triggers:
+    - trigger: event
+      event_type: estonian_radar_rain_expected
+  conditions:
+    - condition: template
+      value_template: "{{ trigger.event.data.severity in ['heavy', 'extreme'] }}"
+    - condition: state
+      entity_id: binary_sensor.window_any_open
+      state: "on"
+  actions:
+    - action: notify.mobile_app
+      data:
+        title: Windows are open
+        message: >-
+          Heavy rain in about {{ trigger.event.data.minutes_until }} min.
+  mode: single
+
+- alias: "Log rain events"
+  triggers:
+    - trigger: event
+      event_type: estonian_radar_rain_started
+    - trigger: event
+      event_type: estonian_radar_rain_stopped
+  actions:
+    - action: logbook.log
+      data:
+        name: "{{ trigger.event.data.location }}"
+        message: >-
+          {{ 'Rain started' if trigger.event.event_type.endswith('started')
+             else 'Rain stopped' }}
+  mode: queued
+
+# --- Don't act on a forecast the radar cannot actually make --------------------------
+# Near the edge of the network the usable horizon shrinks when weather arrives from
+# outside the composite. If an automation depends on a long lead time, check it.
+- alias: "Pre-heat the greenhouse only on a trustworthy forecast"
+  triggers:
+    - trigger: event
+      event_type: estonian_radar_rain_expected
+  conditions:
+    - condition: numeric_state
+      entity_id: sensor.home_usable_forecast
+      above: 45
+    - condition: state
+      entity_id: sensor.home_radar_coverage
+      state: ["excellent", "good"]
+  actions:
+    - action: climate.set_temperature
+      target:
+        entity_id: climate.greenhouse
+      data:
+        temperature: 18
+  mode: single
