@@ -1,0 +1,121 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Pievienot atrašanās vietu",
+        "description": "Izvēlies punktu, kuram vajag lietus prognozi. Pārklājums ir labs aptuveni 150 km rādiusā ap Igaunijas radariem.",
+        "data": {
+          "name": "Nosaukums",
+          "location": "Atrašanās vieta"
+        }
+      }
+    },
+    "error": {
+      "out_of_range": "Šī vieta atrodas ārpus Igaunijas radaru tīkla darbības rādiusa (tuvākais radars: {radar}, {distance} km). Izmantojamu datu šeit nav."
+    },
+    "abort": {
+      "already_configured": "Šī atrašanās vieta jau ir pievienota"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Prognozes iestatījumi",
+        "data": {
+          "rain_threshold": "Lietus slieksnis",
+          "window_radius": "Vidējošanas rādiuss",
+          "forecast_minutes": "Prognozes garums"
+        },
+        "data_description": {
+          "rain_threshold": "Lietus intensitāte, no kuras vieta tiek uzskatīta par slapju.",
+          "window_radius": "Cik radara pikseļi ap vietu tiek vidējoti. Lielāka vērtība ir gludāka, bet mazāk precīza.",
+          "forecast_minutes": "Cik tālu uz priekšu ekstrapolēt. Pēc stundas precizitāte strauji krīt."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "rain_state": {
+        "name": "Lietus",
+        "state": {
+          "dry": "Nelīst",
+          "raining": "Līst",
+          "starting_soon": "Drīz sāksies",
+          "ending_soon": "Drīz beigsies"
+        }
+      },
+      "rain_rate": {
+        "name": "Lietus intensitāte"
+      },
+      "rain_starts_in": {
+        "name": "Lietus sāksies pēc"
+      },
+      "rain_ends_in": {
+        "name": "Lietus beigsies pēc"
+      },
+      "expected_severity": {
+        "name": "Gaidāmā intensitāte",
+        "state": {
+          "very_light": "Ļoti viegls",
+          "light": "Viegls",
+          "moderate": "Mērens",
+          "heavy": "Stiprs",
+          "extreme": "Ļoti stiprs"
+        }
+      },
+      "expected_total": {
+        "name": "Gaidāmais daudzums"
+      },
+      "expected_peak": {
+        "name": "Gaidāmais maksimums"
+      },
+      "expected_duration": {
+        "name": "Gaidāmais ilgums"
+      },
+      "radar_frame_time": {
+        "name": "Pēdējais radara kadrs"
+      },
+      "radar_frame_age": {
+        "name": "Radara kadra vecums"
+      },
+      "nearest_radar_distance": {
+        "name": "Tuvākais radars"
+      },
+      "coverage_quality": {
+        "name": "Radara pārklājums",
+        "state": {
+          "excellent": "Teicams",
+          "good": "Labs",
+          "marginal": "Vājš",
+          "out_of_range": "Ārpus rādiusa"
+        }
+      },
+      "storm_speed": {
+        "name": "Mākoņu ātrums"
+      }
+    },
+    "binary_sensor": {
+      "raining": {
+        "name": "Līst"
+      },
+      "rain_expected": {
+        "name": "Gaidāms lietus"
+      },
+      "data_problem": {
+        "name": "Radara datu problēma"
+      }
+    }
+  },
+  "services": {
+    "get_forecast": {
+      "name": "Iegūt prognozi",
+      "description": "Atgriež punkta lietus prognozi kā laika zīmogu un intensitāšu sarakstu."
+    }
+  },
+  "exceptions": {
+    "no_forecast": {
+      "message": "Šai atrašanās vietai vēl nav pieejama radara prognoze."
+    }
+  }
+}

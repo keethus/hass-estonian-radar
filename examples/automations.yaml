@@ -1,0 +1,54 @@
+# Example automations driven by the integration's events.
+
+- alias: "Rain warning on the wall displays"
+  description: >-
+    Announce incoming rain once, when it is close enough to matter. The event fires on
+    the transition into `starting_soon`, so this cannot spam.
+  triggers:
+    - trigger: event
+      event_type: estonian_radar_rain_expected
+  conditions:
+    - condition: template
+      value_template: "{{ trigger.event.data.minutes_until <= 20 }}"
+    - condition: template
+      value_template: "{{ trigger.event.data.severity not in ['very_light'] }}"
+  actions:
+    - action: notify.persistent_notification
+      data:
+        title: "{{ trigger.event.data.location }}"
+        message: >-
+          Pēc ~{{ trigger.event.data.minutes_until }} min sāksies lietus
+          (kopā ap {{ trigger.event.data.total_mm }} mm).
+  mode: single
+
+- alias: "Close the windows before heavy rain"
+  triggers:
+    - trigger: event
+      event_type: estonian_radar_rain_expected
+  conditions:
+    - condition: template
+      value_template: "{{ trigger.event.data.severity in ['heavy', 'extreme'] }}"
+    - condition: state
+      entity_id: binary_sensor.window_any_open
+      state: "on"
+  actions:
+    - action: notify.mobile_app
+      data:
+        title: Logi vaļā
+        message: >-
+          Pēc ~{{ trigger.event.data.minutes_until }} min gaidāms stiprs lietus.
+  mode: single
+
+- alias: "Log rain events"
+  triggers:
+    - trigger: event
+      event_type: estonian_radar_rain_started
+    - trigger: event
+      event_type: estonian_radar_rain_stopped
+  actions:
+    - action: logbook.log
+      data:
+        name: "{{ trigger.event.data.location }}"
+        message: >-
+          {{ 'Sāka līt' if trigger.event.event_type.endswith('started') else 'Beidza līt' }}
+  mode: queued

@@ -1,0 +1,121 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Lisa asukoht",
+        "description": "Vali punkt, mille kohta soovid sajuprognoosi. Kate on parim umbes 150 km raadiuses Eesti radaritest.",
+        "data": {
+          "name": "Nimi",
+          "location": "Asukoht"
+        }
+      }
+    },
+    "error": {
+      "out_of_range": "See asukoht jääb Eesti radarivõrgu ulatusest välja (lähim radar: {radar}, {distance} km). Kasutatavaid andmeid siin ei ole."
+    },
+    "abort": {
+      "already_configured": "See asukoht on juba lisatud"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Prognoosi seaded",
+        "data": {
+          "rain_threshold": "Saju lävi",
+          "window_radius": "Keskmistamise raadius",
+          "forecast_minutes": "Prognoosi pikkus"
+        },
+        "data_description": {
+          "rain_threshold": "Sajuintensiivsus, millest alates loetakse asukoht märjaks.",
+          "window_radius": "Mitut radaripikslit asukoha ümber keskmistatakse. Suurem väärtus on ühtlasem, kuid vähem täpne.",
+          "forecast_minutes": "Kui kaugele ette ekstrapoleerida. Pärast tundi langeb täpsus järsult."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "rain_state": {
+        "name": "Sadu",
+        "state": {
+          "dry": "Kuiv",
+          "raining": "Sajab",
+          "starting_soon": "Algab varsti",
+          "ending_soon": "Lõpeb varsti"
+        }
+      },
+      "rain_rate": {
+        "name": "Saju intensiivsus"
+      },
+      "rain_starts_in": {
+        "name": "Sadu algab"
+      },
+      "rain_ends_in": {
+        "name": "Sadu lõpeb"
+      },
+      "expected_severity": {
+        "name": "Oodatav intensiivsus",
+        "state": {
+          "very_light": "Väga nõrk",
+          "light": "Nõrk",
+          "moderate": "Mõõdukas",
+          "heavy": "Tugev",
+          "extreme": "Väga tugev"
+        }
+      },
+      "expected_total": {
+        "name": "Oodatav sajuhulk"
+      },
+      "expected_peak": {
+        "name": "Oodatav maksimum"
+      },
+      "expected_duration": {
+        "name": "Oodatav kestus"
+      },
+      "radar_frame_time": {
+        "name": "Viimane radaripilt"
+      },
+      "radar_frame_age": {
+        "name": "Radaripildi vanus"
+      },
+      "nearest_radar_distance": {
+        "name": "Lähim radar"
+      },
+      "coverage_quality": {
+        "name": "Radari kate",
+        "state": {
+          "excellent": "Suurepärane",
+          "good": "Hea",
+          "marginal": "Nõrk",
+          "out_of_range": "Väljaspool ulatust"
+        }
+      },
+      "storm_speed": {
+        "name": "Sajuala kiirus"
+      }
+    },
+    "binary_sensor": {
+      "raining": {
+        "name": "Sajab"
+      },
+      "rain_expected": {
+        "name": "Oodata on sadu"
+      },
+      "data_problem": {
+        "name": "Radariandmete probleem"
+      }
+    }
+  },
+  "services": {
+    "get_forecast": {
+      "name": "Küsi prognoosi",
+      "description": "Tagastab punkti sajuprognoosi ajatempliga intensiivsuste loendina."
+    }
+  },
+  "exceptions": {
+    "no_forecast": {
+      "message": "Selle asukoha kohta ei ole veel radariprognoosi."
+    }
+  }
+}

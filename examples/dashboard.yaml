@@ -1,0 +1,56 @@
+# Example Lovelace cards.
+# Replace `konrada_nams` with your own entry's slug.
+
+# --- A single tile: state, lead time and expected intensity -------------------------
+- type: tile
+  entity: sensor.konrada_nams_rain
+  icon: mdi:weather-pouring
+  features:
+    - type: trend-graph
+
+# --- Summary card, built in the dashboard so it follows each user's language --------
+- type: markdown
+  content: >-
+    {% set starts = states('sensor.konrada_nams_rain_starts_in') %}
+    {% set ends = states('sensor.konrada_nams_rain_ends_in') %}
+    {% set severity = states('sensor.konrada_nams_expected_intensity') %}
+    {% set total = states('sensor.konrada_nams_expected_total') %}
+    {% if is_state('binary_sensor.konrada_nams_radar_data_problem', 'on') %}
+      ## Radara dati nav pieejami
+    {% elif ends not in ['unknown', 'unavailable'] %}
+      ## Līst
+      Beigsies pēc ~{{ ends }} min
+    {% elif starts not in ['unknown', 'unavailable'] %}
+      ## Pēc ~{{ starts }} min sāksies lietus
+      {{ severity }}, kopā ap {{ total }} mm
+    {% else %}
+      ## Tuvāko 90 minūšu laikā lietus nav gaidāms
+    {% endif %}
+
+# --- 90-minute precipitation bar chart (requires ApexCharts card from HACS) ----------
+- type: custom:apexcharts-card
+  header:
+    show: true
+    title: Nokrišņi tuvākajās 90 min
+  graph_span: 90min
+  span:
+    start: minute
+  apex_config:
+    chart:
+      type: bar
+      height: 160
+    plotOptions:
+      bar:
+        columnWidth: 85%
+    dataLabels:
+      enabled: false
+  series:
+    - entity: sensor.konrada_nams_rain_rate
+      name: mm/h
+      type: column
+      color: "#7aa6d6"
+      data_generator: |
+        return (entity.attributes.forecast || []).map(point => [
+          new Date(point.datetime).getTime(),
+          point.precipitation
+        ]);

@@ -1,0 +1,66 @@
+name: Bug report
+description: Something is wrong with the integration
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing: if the integration says your location has poor or no radar
+        coverage, that is usually the radar network's geometry rather than a bug — see
+        the coverage section in the README.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you expect, and what did you get instead?
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Integration version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+
+  - type: input
+    id: ha-version
+    attributes:
+      label: Home Assistant version
+      placeholder: "2025.8.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: install
+    attributes:
+      label: Installation type
+      options:
+        - Home Assistant OS
+        - Home Assistant Container
+        - Home Assistant Supervised
+        - Home Assistant Core (venv)
+    validations:
+      required: true
+
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics
+      description: >-
+        Settings → Devices & Services → Estonian Weather Radar → the three dots on the
+        device → Download diagnostics. This contains the radar frame time, the estimated
+        motion, the grid dimensions and your coverage quality — almost every question I
+        would ask is answered by it. Coordinates in it are rounded to two decimals.
+      render: json
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: >-
+        Add `custom_components.estonian_radar: debug` under `logger:` in
+        configuration.yaml, reload, and paste what appears.
+      render: text

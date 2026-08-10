@@ -1,0 +1,121 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Add a location",
+        "description": "Pick the point you want a rain nowcast for. Coverage is best within about 150 km of an Estonian radar.",
+        "data": {
+          "name": "Name",
+          "location": "Location"
+        }
+      }
+    },
+    "error": {
+      "out_of_range": "This location is beyond the range of the Estonian radar network (nearest radar: {radar}, {distance} km). No usable data is available here."
+    },
+    "abort": {
+      "already_configured": "This location is already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Nowcast settings",
+        "data": {
+          "rain_threshold": "Rain threshold",
+          "window_radius": "Averaging radius",
+          "forecast_minutes": "Forecast horizon"
+        },
+        "data_description": {
+          "rain_threshold": "Rain rate at or above which the location counts as wet.",
+          "window_radius": "How many radar pixels around the location are averaged. Larger values are smoother but less local.",
+          "forecast_minutes": "How far ahead to extrapolate. Accuracy drops sharply past an hour."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "rain_state": {
+        "name": "Rain",
+        "state": {
+          "dry": "Dry",
+          "raining": "Raining",
+          "starting_soon": "Starting soon",
+          "ending_soon": "Ending soon"
+        }
+      },
+      "rain_rate": {
+        "name": "Rain rate"
+      },
+      "rain_starts_in": {
+        "name": "Rain starts in"
+      },
+      "rain_ends_in": {
+        "name": "Rain ends in"
+      },
+      "expected_severity": {
+        "name": "Expected intensity",
+        "state": {
+          "very_light": "Very light",
+          "light": "Light",
+          "moderate": "Moderate",
+          "heavy": "Heavy",
+          "extreme": "Extreme"
+        }
+      },
+      "expected_total": {
+        "name": "Expected total"
+      },
+      "expected_peak": {
+        "name": "Expected peak"
+      },
+      "expected_duration": {
+        "name": "Expected duration"
+      },
+      "radar_frame_time": {
+        "name": "Latest radar frame"
+      },
+      "radar_frame_age": {
+        "name": "Radar frame age"
+      },
+      "nearest_radar_distance": {
+        "name": "Nearest radar"
+      },
+      "coverage_quality": {
+        "name": "Radar coverage",
+        "state": {
+          "excellent": "Excellent",
+          "good": "Good",
+          "marginal": "Marginal",
+          "out_of_range": "Out of range"
+        }
+      },
+      "storm_speed": {
+        "name": "Storm speed"
+      }
+    },
+    "binary_sensor": {
+      "raining": {
+        "name": "Raining"
+      },
+      "rain_expected": {
+        "name": "Rain expected"
+      },
+      "data_problem": {
+        "name": "Radar data problem"
+      }
+    }
+  },
+  "services": {
+    "get_forecast": {
+      "name": "Get forecast",
+      "description": "Returns the point precipitation nowcast as a list of timestamped rain rates."
+    }
+  },
+  "exceptions": {
+    "no_forecast": {
+      "message": "No radar forecast is available yet for this location."
+    }
+  }
+}

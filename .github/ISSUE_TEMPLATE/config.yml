@@ -1,0 +1,10 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or idea
+    url: https://github.com/keethus/hass-estonian-radar/discussions
+    about: For anything that is not a reproducible bug.
+  - name: Radar data problems
+    url: https://keskkonnaportaal.ee/en/topics/remote-sensing/weather-radars
+    about: >-
+      If the Estonian Environment Agency's own radar page is also showing gaps, the
+      outage is upstream and there is nothing this integration can do about it.
