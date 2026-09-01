@@ -1,6 +1,6 @@
 pytest>=8.0
 pytest-cov>=5.0
-numpy>=1.26
+numpy>=2.5.2
 h5py>=3.11
 aiohttp>=3.9
 ruff>=0.6
